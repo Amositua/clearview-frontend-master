@@ -1,230 +1,281 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
+import { FileSignature, Upload, Shield, Clock, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
-const HomePage = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const slides = [
-    {
-      title: "Effortless Document Management",
-      description: "Streamline your business processes with secure uploads, electronic signatures, and easy meeting scheduling.",
-    },
-    {
-      title: "Secure and Reliable",
-      description: "Keep your business documents safe and accessible with top-notch security features.",
-    },
-    {
-      title: "Collaborate with Ease",
-      description: "Work seamlessly with your team and clients in one platform.",
-    },
-  ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [slides.length]);
-
-  return (
-    <Container>
-      <Header>
-        <Logo>DocuPro</Logo>
-        <ButtonGroup>
-            <Link to="/sign-in">
-          <Button>Sign In</Button>
-          </Link>
-          <Link to="/sign-up">
-          <Button primary>Sign Up</Button>
-          </Link>
-        </ButtonGroup>
-      </Header>
-      <MainContent>
-        <Slideshow>
-          <Slide>
-            <Tagline>{slides[currentSlide].title}</Tagline>
-            <Description>{slides[currentSlide].description}</Description>
-          </Slide>
-        </Slideshow>
-        <FeatureSection>
-          <Feature>
-            <FeatureTitle>Secure Document Uploads</FeatureTitle>
-            <FeatureDescription>
-              Upload and manage all your business documents in one secure platform.
-            </FeatureDescription>
-          </Feature>
-          <Feature>
-            <FeatureTitle>Electronic Signatures</FeatureTitle>
-            <FeatureDescription>
-              Sign documents digitally with legally binding e-signatures.
-            </FeatureDescription>
-          </Feature>
-          <Feature>
-            <FeatureTitle>Integrated Scheduling</FeatureTitle>
-            <FeatureDescription>
-              Schedule and manage meetings seamlessly with our built-in calendar.
-            </FeatureDescription>
-          </Feature>
-          <Feature>
-            <FeatureTitle>Team Collaboration</FeatureTitle>
-            <FeatureDescription>
-            Collaborate effectively with your team using shared workspaces and real-time updates.
-            </FeatureDescription>
-          </Feature>
-        </FeatureSection>
-        <GetStartedButton>Get Started</GetStartedButton>
-      </MainContent>
-      <Footer>
-        <FooterText>
-          © {new Date().getFullYear()} DocuPro. All rights reserved. | Privacy Policy | Terms of Service
-        </FooterText>
-      </Footer>
-    </Container>
-  );
-};
-
-// Styled Components
 const Container = styled.div`
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  background: linear-gradient(to bottom, #f0f4f8, #d9e2ec);
-  color: #333;
-  font-family: 'Roboto', sans-serif;
+  min-height: 100vh;
+  background-color: #ffffff;
 `;
 
-const Header = styled.header`
-  width: 100%;
-  padding: 20px 40px;
+const Nav = styled.nav`
+  border-bottom: 1px solid #e5e7eb;
+`;
+
+const NavContent = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
-const Logo = styled.h1`
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #007BFF;
+const Logo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  span {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 1rem;
 `;
 
 const Button = styled.button`
-  padding: 10px 20px;
-  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
   font-weight: 500;
-  color: ${({ primary }) => (primary ? "#fff" : "#007BFF")};
-  background: ${({ primary }) => (primary ? "#007BFF" : "#fff")};
-  border: 2px solid #007BFF;
-  border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s, color 0.3s;
-
-  &:hover {
-    background: ${({ primary }) => (primary ? "#0056b3" : "#f0f4f8")};
-    color: ${({ primary }) => (primary ? "#fff" : "#0056b3")};
-  }
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  ${props => props.primary ? `
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    
+    &:hover {
+      background-color: #1d4ed8;
+    }
+  ` : `
+    background-color: transparent;
+    color: #374151;
+    border: 1px solid transparent;
+    
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  `}
+  
+  ${props => props.large && `
+    padding: 0.75rem 1.5rem;
+    font-size: 1.125rem;
+  `}
 `;
 
-const MainContent = styled.div`
-  flex: 1;
+const HeroSection = styled.section`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 5rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 20px;
-`;
-
-const Slideshow = styled.div`
-  width: 100%;
-  max-width: 600px;
-  margin-bottom: 30px;
-  overflow: hidden;
-  text-align: center;
-`;
-
-const Slide = styled.div`
-  animation: fade 1.5s ease-in-out;
-  @keyframes fade {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    align-items: center;
   }
 `;
 
-const Tagline = styled.h2`
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 15px;
-  color: #333;
+const HeroContent = styled.div`
+  @media (min-width: 1024px) {
+    width: 50%;
+    padding-right: 3rem;
+  }
 `;
 
-const Description = styled.p`
-  font-size: 1.2rem;
-  margin-bottom: 30px;
-  color: #555;
-  line-height: 1.6;
+const HeroTitle = styled.h1`
+  font-size: 2.25rem;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  
+  @media (min-width: 1024px) {
+    font-size: 3.75rem;
+  }
+  
+  span {
+    color: #2563eb;
+  }
 `;
 
-const FeatureSection = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  margin: 30px 0;
-  width: 100%;
-  max-width: 900px;
+const HeroText = styled.p`
+  font-size: 1.125rem;
+  color: #6b7280;
+  margin-bottom: 2rem;
 `;
 
-const Feature = styled.div`
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+const HeroImage = styled.div`
+  margin-top: 3rem;
+  
+  @media (min-width: 1024px) {
+    width: 50%;
+    margin-top: 0;
+  }
+  
+  img {
+    width: 100%;
+    border-radius: 0.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+`;
+
+const FeaturesSection = styled.section`
+  background-color: #f9fafb;
+  padding: 5rem 1rem;
+`;
+
+const FeaturesContainer = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const FeaturesTitle = styled.h2`
+  font-size: 1.875rem;
+  font-weight: bold;
   text-align: center;
+  margin-bottom: 3rem;
 `;
 
-const FeatureTitle = styled.h3`
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: #007BFF;
+const FeaturesGrid = styled.div`
+  display: grid;
+  gap: 2rem;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 `;
 
-const FeatureDescription = styled.p`
-  font-size: 1rem;
-  color: #555;
-  line-height: 1.5;
-`;
-
-const GetStartedButton = styled(Button)`
-  background: #28a745;
-  color: #fff;
-  border: none;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-  &:hover {
-    background: #218838;
+const FeatureCard = styled.div`
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 1rem 0;
+  }
+  
+  p {
+    color: #6b7280;
   }
 `;
 
 const Footer = styled.footer`
-  width: 100%;
-  padding: 20px;
-  text-align: center;
-  background: #f8f9fa;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid #e5e7eb;
+  padding: 2rem 1rem;
 `;
 
-const FooterText = styled.p`
-  font-size: 0.9rem;
-  color: #777;
+const FooterContent = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
-export default HomePage;
+const Copyright = styled.p`
+  font-size: 0.875rem;
+  color: #6b7280;
+`;
+
+function HomPage() {
+  return (
+    <Container>
+      <Nav>
+        <NavContent>
+          <Logo>
+            <FileSignature size={24} color="#2563eb" />
+            <span>DocSign</span>
+          </Logo>
+          <ButtonGroup>
+            <Link to="/sign-in">
+            <Button>Sign In</Button>
+            </Link>
+            <Link to="/sign-up">
+            <Button primary>Sign Up</Button>
+            </Link>
+          </ButtonGroup>
+        </NavContent>
+      </Nav>
+
+      <HeroSection>
+        <HeroContent>
+          <HeroTitle>
+            Sign Documents Securely,
+            <span> Anywhere</span>
+          </HeroTitle>
+          <HeroText>
+            Transform your document workflow with our secure, easy-to-use digital signing platform. Upload, sign, and manage all your important documents in one place.
+          </HeroText>
+          <ButtonGroup>
+            <Button primary large>
+              <Upload size={20} />
+              Upload Document
+            </Button>
+            <Button large>
+              Learn More
+            </Button>
+          </ButtonGroup>
+        </HeroContent>
+        <HeroImage>
+          <img
+            src="https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=1000"
+            alt="Document signing illustration"
+          />
+        </HeroImage>
+      </HeroSection>
+
+      <FeaturesSection>
+        <FeaturesContainer>
+          <FeaturesTitle>Why Choose DocSign?</FeaturesTitle>
+          <FeaturesGrid>
+            <FeatureCard>
+              <Shield size={48} color="#2563eb" />
+              <h3>Secure & Compliant</h3>
+              <p>
+                Bank-level security with advanced encryption and compliance with global e-signature laws.
+              </p>
+            </FeatureCard>
+            <FeatureCard>
+              <Clock size={48} color="#2563eb" />
+              <h3>Fast & Efficient</h3>
+              <p>
+                Sign documents in minutes, not days. Streamline your workflow with automated processes.
+              </p>
+            </FeatureCard>
+            <FeatureCard>
+              <Users size={48} color="#2563eb" />
+              <h3>Team Collaboration</h3>
+              <p>
+                Easy document sharing and real-time collaboration with team members and clients.
+              </p>
+            </FeatureCard>
+          </FeaturesGrid>
+        </FeaturesContainer>
+      </FeaturesSection>
+
+      <Footer>
+        <FooterContent>
+          <Logo>
+            <FileSignature size={20} color="#2563eb" />
+            <span>DocSign</span>
+          </Logo>
+          <Copyright>
+            © 2024 DocSign. All rights reserved.
+          </Copyright>
+        </FooterContent>
+      </Footer>
+    </Container>
+  );
+}
+
+export default HomPage;

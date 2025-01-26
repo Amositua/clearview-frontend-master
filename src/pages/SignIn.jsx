@@ -22,7 +22,7 @@ const SignInPage = () => {
 
   useEffect(() => {
     if (userInfo) {
-      navigate('/dashboard');
+      navigate('/upload-document');
     }
   }, [navigate, userInfo]);
 
@@ -39,7 +39,7 @@ const SignInPage = () => {
     try {
         const res = await login({ email, password }).unwrap()
         dispatch(setCredentials({ ...res }))
-        navigate('/dashboard')
+        navigate('/upload-document')
         console.log(res)
       } catch (err) {
         // toast.error(err)

@@ -23,7 +23,7 @@ const SignUpPage = () => {
   const { userInfo } = useSelector((state) => state.auth);
   useEffect(() => {
     if (userInfo) {
-      navigate("/dashboard");
+      navigate("/upload-document");
     }
   }, [navigate,  userInfo]);
 
@@ -45,7 +45,7 @@ const SignUpPage = () => {
     try {
         const res = await register({ name, email, password }).unwrap();
         dispatch(setCredentials({ ...res }))
-        navigate('/dashboard')
+        navigate('/upload-document')
         console.log(res)
       } catch (err) {
         // toast.error(err)
