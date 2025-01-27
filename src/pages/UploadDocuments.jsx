@@ -1,7 +1,10 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useGetEnvelopIdMutation } from "../slices/usersApiSlice";
 import { Upload, File, Trash2, AlertCircle, CheckCircle  } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { setPostResponse } from "../slices/envelopIdSlice";
 
 function UploadDocuments() {
   const [file, setFile] = useState(null);
@@ -10,7 +13,10 @@ function UploadDocuments() {
   const [successMessage, setSuccessMessage] = useState("");
   const fileInputRef = useRef(null);
 
+  const [ getEnvelopeId, {data} ] = useGetEnvelopIdMutation()
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -81,20 +87,23 @@ function UploadDocuments() {
     });
     console.log(formDataObject);
     try {
-      const token = localStorage.getItem("userInfo");
-      const parsedToken = JSON.parse(token);
+      // const token = localStorage.getItem("userInfo");
+      // const parsedToken = JSON.parse(token);
 
-      const response = await fetch("/api/v1/documents/upload", {
-        method: "POST",
-        body: formData,
-        headers: { Authorization: `Bearer ${parsedToken.accessToken}` },
-      });
+      // const response = await fetch("/api/v1/documents/upload", {
+      //   method: "POST",
+      //   body: formData,
+      //   headers: { Authorization: `Bearer ${parsedToken.accessToken}` },
+      // });
+      const response = await getEnvelopeId(formData)
+      console.log(response)
+      dispatch(setPostResponse(response));
 
-      if (response.ok) {
-        const result = await response.json();
+      if (response) {
+        // const result = await response.json();
         // Hide message after 5 seconds
         // alert("Files uploaded successfully!");
-        console.log("Server Response:", result);
+        console.log("Server Response:", response);
         setSuccessMessage("Document uploaded successfully!");
         setFile(null);
         setEmails("");
@@ -134,6 +143,7 @@ function UploadDocuments() {
     }
   };
   console.log(successMessage);
+
 
   return (
     <>

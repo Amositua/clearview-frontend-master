@@ -26,6 +26,13 @@ export const userApiSlice = apiSlice.injectEndpoints({
         responseHandler: (response) => response.text(),
       }),
     }),
+    getEnvelopId: builder.mutation({
+      query: (data) => ({
+        url: `documents/upload`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
 }),
 });
 
@@ -33,4 +40,5 @@ export const {
     useLoginMutation,
     useLogoutMutation,
     useRegisterMutation,
+    useGetEnvelopIdMutation
   } = userApiSlice;

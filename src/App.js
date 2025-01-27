@@ -40,6 +40,7 @@ import AgreementDetail from "./pages/AgreementDetail";
 import AgreementEdit from "./pages/AgreementEdit";
 
 import { useLogoutMutation } from "./slices/usersApiSlice";
+import DocumentSigning from "./pages/SignDocument";
 
 // import Documents from '.';
 // import History from './pages/History';
@@ -135,6 +136,9 @@ const NavSection = styled.div`
     margin-bottom: 0.75rem;
     padding-left: 1rem;
   }
+    .log-out {
+       margin-top: 5rem;
+    }
 `;
 
 const NavItem = styled(Link)`
@@ -341,21 +345,30 @@ function AppContent() {
                 <History size={20} />
                 Sign Document
               </NavItem>
+              <NavItem to="/document-insight" $active={location.pathname === "/document-insight"}>
+                <History size={20} />
+             Insights from Documents
+              </NavItem>
             </NavSection>
 
             <NavSection>
-              <h2>SETTINGS</h2>
+              <h2>MORE TOOLS</h2>
               <NavItem onClick={handleLogout} disabled={isLoading}>
+                <Users size={20} />
+                Sync Calender
+              </NavItem>
+              <NavItem onClick={handleLogout} disabled={isLoading}>
+                <Users size={20} />
+                Notifications
+              </NavItem>
+
+              <NavSection>
+                <h2 className="log-out">SETTINGS</h2>
+                <NavItem onClick={handleLogout} disabled={isLoading}>
                 <Users size={20} />
                 LOGOUT
               </NavItem>
-              {/* <NavItem
-                to="/settings"
-                $active={location.pathname === "/settings"}
-              >
-                <Settings size={20} />
-                Settings
-              </NavItem> */}
+              </NavSection>
             </NavSection>
           </Nav>
         </Sidebar>
@@ -401,7 +414,11 @@ function AppContent() {
           <Route path="/agreement-detail/:id" element={<AgreementDetail />} />
           <Route path="/edit-document/:id" element={<AgreementEdit />} />
 
-          <Route path="/sign-document" element={<HomePage />} />
+          <Route path="/sign-document" element={<DocumentSigning />} />
+          <Route path="/document-insight" element={<HomePage />} />
+
+          <Route path="/calender-sync" element={<HomePage />} />
+          <Route path="/notifications" element={<HomePage />} />
 
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/sign-up" element={<SignUpPage />} />

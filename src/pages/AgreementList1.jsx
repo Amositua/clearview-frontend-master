@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { FileText, ChevronRight, Search, Plus, Loader } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { FileText, ChevronRight, Search, Plus, Loader } from "lucide-react";
 
 const Container = styled.div`
   max-width: 1200px;
@@ -34,7 +34,7 @@ const SearchInput = styled.input`
   border-radius: 6px;
   font-size: 1rem;
   transition: all 0.2s;
-  
+
   &:focus {
     outline: none;
     border-color: #3182ce;
@@ -60,7 +60,7 @@ const CreateButton = styled(Link)`
   border-radius: 6px;
   text-decoration: none;
   transition: all 0.2s;
-  
+
   &:hover {
     background: #2c5282;
     transform: translateY(-2px);
@@ -82,7 +82,7 @@ const Card = styled(Link)`
   transition: all 0.2s;
   text-decoration: none;
   color: inherit;
-  
+
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -116,28 +116,28 @@ const Status = styled.span`
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 500;
-  background: ${props => {
+  background: ${(props) => {
     switch (props.status?.toLowerCase()) {
-      case 'completed':
-        return '#C6F6D5';
-      case 'pending':
-        return '#FEEBC8';
-      case 'draft':
-        return '#E2E8F0';
+      case "completed":
+        return "#C6F6D5";
+      case "pending":
+        return "#FEEBC8";
+      case "draft":
+        return "#E2E8F0";
       default:
-        return '#E2E8F0';
+        return "#E2E8F0";
     }
   }};
-  color: ${props => {
+  color: ${(props) => {
     switch (props.status?.toLowerCase()) {
-      case 'completed':
-        return '#2F855A';
-      case 'pending':
-        return '#C05621';
-      case 'draft':
-        return '#4A5568';
+      case "completed":
+        return "#2F855A";
+      case "pending":
+        return "#C05621";
+      case "draft":
+        return "#4A5568";
       default:
-        return '#4A5568';
+        return "#4A5568";
     }
   }};
 `;
@@ -159,24 +159,25 @@ function AgreementList() {
   const [agreements, setAgreements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchAgreements();
   }, []);
 
   const fetchAgreements = async () => {
-        try {
-            const token = localStorage.getItem('userInfo');
-            const parsedToken = JSON.parse(token);
-            console.log(parsedToken.accessToken);
-            const response = await fetch('/api/v1/agreements/get-all-agreement', {
-              method: 'GET',
-              headers: {
-                'Authorization': `Bearer ${parsedToken.accessToken}` // Add authorization header
-              }
-            });      if (!response.ok) {
-        throw new Error('Failed to fetch agreements');
+    try {
+      const token = localStorage.getItem("userInfo");
+      const parsedToken = JSON.parse(token);
+      console.log(parsedToken.accessToken);
+      const response = await fetch("/api/v1/agreements/get-all-agreement", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${parsedToken.accessToken}`, // Add authorization header
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch agreements");
       }
       const data = await response.json();
       const contents = data.content;
@@ -188,7 +189,7 @@ function AgreementList() {
     }
   };
 
-  const filteredAgreements = agreements.filter(agreement =>
+  const filteredAgreements = agreements.filter((agreement) =>
     agreement.title?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -232,7 +233,10 @@ function AgreementList() {
 
       <Grid>
         {filteredAgreements.map((agreement) => (
-          <Card key={agreement.agreementId} to={`/agreement-detail/${agreement.agreementId}`}>
+          <Card
+            key={agreement.agreementId}
+            to={`/agreement-detail/${agreement.agreementId}`}
+          >
             <CardTitle>{agreement.title}</CardTitle>
             <CardMeta>
               Created: {new Date(agreement.signedDate).toLocaleDateString()}
