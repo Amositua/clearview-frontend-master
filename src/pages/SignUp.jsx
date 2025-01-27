@@ -20,12 +20,12 @@ const SignUpPage = () => {
 
   const [ register ] = useRegisterMutation()
 
-  const { userInfo } = useSelector((state) => state.auth);
-  useEffect(() => {
-    if (userInfo) {
-      navigate("/upload-document");
-    }
-  }, [navigate,  userInfo]);
+  // const { userInfo } = useSelector((state) => state.auth);
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     navigate("/upload-document");
+  //   }
+  // }, [navigate,  userInfo]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

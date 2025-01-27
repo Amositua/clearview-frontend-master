@@ -4,22 +4,22 @@ import { Target, Flag, Trophy, CheckCircle, ArrowRight } from 'lucide-react';
 
 const Container = styled.div`
   max-width: 800px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  margin: 0.2rem auto;
+  padding: 0 0rem;
 `;
 
 const Title = styled.h1`
   color: #1a365d;
   font-size: 2.5rem;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
   font-weight: bold;
 `;
 
 const TabsContainer = styled.div`
   display: flex;
   gap: 0.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
   flex-wrap: wrap;
 
   @media (max-width: 640px) {
@@ -426,28 +426,28 @@ const ProgressIndicator = styled.div`
 //   font-weight: 500;
 // `;
 
-// const ErrorMessage = styled.div`
-//   color: #e53e3e;
-//   padding: 1rem;
-//   border-radius: 6px;
-//   background-color: #fff5f5;
-//   margin-bottom: 1rem;
-//   display: ${props => props.visible ? 'block' : 'none'};
+const ErrorMessage = styled.div`
+  color: #e53e3e;
+  padding: 1rem;
+  border-radius: 6px;
+  background-color: #fff5f5;
+  margin-bottom: 1rem;
+  display: ${props => props.visible ? 'block' : 'none'};
+`;
+
+const SuccessMessage = styled.div`
+  color: #2f855a;
+  padding: 1rem;
+  border-radius: 6px;
+  background-color: #f0fff4;
+  margin-bottom: 1rem;
+  display: ${props => props.visible ? 'block' : 'none'};
 // `;
 
-// const SuccessMessage = styled.div`
-//   color: #2f855a;
-//   padding: 1rem;
-//   border-radius: 6px;
-//   background-color: #f0fff4;
-//   margin-bottom: 1rem;
-//   display: ${props => props.visible ? 'block' : 'none'};
-// `;
-
-function App() {
+function AgreementForm() {
   const [activeSection, setActiveSection] = useState(1);
   const [formData, setFormData] = useState({
-    agreementId: 0,
+    // agreementId: 0,
     docuSignEnvelopeId: "",
     title: "",
     status: "DRAFT",
@@ -458,7 +458,7 @@ function App() {
 
   const [currentMilestone, setCurrentMilestone] = useState({
     title: "",
-    description: "",
+    // description: "",
     dueDate: "",
     status: "PENDING"
   });
@@ -466,7 +466,7 @@ function App() {
   const [currentObligation, setCurrentObligation] = useState({
     description: "",
     dueDate: "",
-    assignedTo: "",
+    // assignedTo: "",
     status: "PENDING"
   });
 
@@ -620,9 +620,9 @@ function App() {
         milestones: [
           ...prev.milestones,
           {
-            milestoneId: prev.milestones.length,
+            // milestoneId: prev.milestones.length,
             ...currentMilestone,
-            agreement: prev.title,
+            // agreement: prev.title,
             status: "PENDING"
           }
         ]
@@ -631,7 +631,7 @@ function App() {
         title: "",
         description: "",
         dueDate: "",
-        status: "PENDING"
+        // status: "PENDING"
       });
     }
     
@@ -651,23 +651,27 @@ function App() {
       obligations: [
         ...formData.obligations,
         {
-          obligationId: formData.obligations.length,
+        //   obligationId: formData.obligations.length,
           ...currentObligation,
-          agreement: formData.title,
+        //   agreement: formData.title,
           status: "PENDING"
         }
       ]
     };
-    console.log(finalFormData);
+    console.log(JSON.stringify(finalFormData));
 
     try {
-      const response = await fetch('https://contract-image-latest.onrender.com/api/v1/documents/upload', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(finalFormData)
-      });
+        const token = localStorage.getItem('userInfo');
+        const parsedToken = JSON.parse(token);
+        console.log(parsedToken.accessToken);
+        const response = await fetch('/api/v1/agreements/sign-agreement', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${parsedToken.accessToken}` // Add authorization header
+          },
+          body: JSON.stringify(finalFormData)
+        });
 
       const data = await response.json();
 
@@ -676,6 +680,7 @@ function App() {
       }
 
       setSuccess('Document uploaded successfully!');
+      console.log('Server Response:', data);
       
       // Reset form
       setFormData({
@@ -715,13 +720,13 @@ function App() {
       <Container>
         <Title>Agreement Progress Tracker</Title>
         
-        {/* <ErrorMessage visible={error}>
+        <ErrorMessage visible={error}>
           {error}
         </ErrorMessage>
         
         <SuccessMessage visible={success}>
           {success}
-        </SuccessMessage> */}
+        </SuccessMessage>
         
         <TabsContainer>
           {sections.map((section) => (
@@ -762,4 +767,4 @@ function App() {
   );
 }
 
-export default App;
+export default AgreementForm;

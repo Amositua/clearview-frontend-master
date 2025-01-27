@@ -194,7 +194,7 @@ function HomPage() {
         <NavContent>
           <Logo>
             <FileSignature size={24} color="#2563eb" />
-            <span>DocSign</span>
+            <span>ClearView</span>
           </Logo>
           <ButtonGroup>
             <Link to="/sign-in">
@@ -236,7 +236,7 @@ function HomPage() {
 
       <FeaturesSection>
         <FeaturesContainer>
-          <FeaturesTitle>Why Choose DocSign?</FeaturesTitle>
+          <FeaturesTitle>Why Choose ClearView?</FeaturesTitle>
           <FeaturesGrid>
             <FeatureCard>
               <Shield size={48} color="#2563eb" />
@@ -267,10 +267,10 @@ function HomPage() {
         <FooterContent>
           <Logo>
             <FileSignature size={20} color="#2563eb" />
-            <span>DocSign</span>
+            <span>ClearView</span>
           </Logo>
           <Copyright>
-            © 2024 DocSign. All rights reserved.
+            © 2024 ClearView. All rights reserved.
           </Copyright>
         </FooterContent>
       </Footer>

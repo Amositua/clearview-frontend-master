@@ -19,19 +19,27 @@ import {
   Bell,
   Search,
 } from "lucide-react";
-
+import { useNavigate } from 'react-router-dom'
+import { logout } from './slices/authSlice'
+import { useDispatch } from 'react-redux'
 // Import pages
 import HomePage from "./pages/Homepage";
 import LogExpense from "./pages/test";
 import SignInPage from "./pages/SignIn";
 import SignUpPage from "./pages/SignUp";
+
 import UploadDocuments from "./pages/UploadDocuments";
 
 import ForgotPasswordPage from "./pages/ForgotPassword";
 import TokenVerification from "./pages/TokenVerificationPage";
 import ResetPassword from "./pages/ResetPasswordPage";
-import CreateAgreement from "./pages/CreateAgreement";
+
 import AgreementForm from "./pages/CreateAgreement";
+import AgreementList from "./pages/AgreementList1";
+import AgreementDetail from "./pages/AgreementDetail";
+import AgreementEdit from "./pages/AgreementEdit";
+
+import { useLogoutMutation } from "./slices/usersApiSlice";
 
 // import Documents from '.';
 // import History from './pages/History';
@@ -160,7 +168,7 @@ const MainContent = styled.main`
 const TopBar = styled.header`
   background: white;
   border-bottom: 1px solid #e2e8f0;
-  padding: 1rem 1.5rem;
+  padding: 1.5rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -243,6 +251,12 @@ const NotificationBadge = styled.span`
 function AppContent() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1024);
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [logoutCall, { isLoading }] = useLogoutMutation(); 
+
+  
 
   // Handle window resize
   useEffect(() => {
@@ -265,6 +279,22 @@ function AppContent() {
     }
   }, [location]);
   const publicRoutes = [ "/", "/sign-up", "/sign-in", '/forgot-password', '/token/:email', '/reset-password/:email'];
+
+  const handleLogout = async () => {
+    const token = localStorage.getItem('userInfo');
+    const parsedToken = JSON.parse(token);
+    const accessToken = parsedToken?.accessToken;
+    console.log(accessToken);
+    try {
+     const res = await logoutCall(accessToken).unwrap(); // `.unwrap()` resolves the mutation to a Promise
+     console.log(res);
+      dispatch(logout());
+      navigate('/');
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
+  };
+
   return (
     <Container>
       {!publicRoutes.includes(location.pathname) && (
@@ -279,7 +309,7 @@ function AppContent() {
           <SidebarHeader>
             <Logo to="/">
               <FileSignature size={28} color="#2563eb" />
-              <span>DocSign</span>
+              <span>ClearView</span>
             </Logo>
             <CloseButton onClick={() => setIsSidebarOpen(false)}>
               <X size={24} />
@@ -303,25 +333,29 @@ function AppContent() {
                 <FileText size={20} />
                 Create Agreement
               </NavItem>
-              <NavItem to="/history" $active={location.pathname === "/history"}>
+              <NavItem to="/all-agreements" $active={location.pathname === "/all-agreements"}>
                 <History size={20} />
-                History
+                All Agreements
+              </NavItem>
+              <NavItem to="/sign-document" $active={location.pathname === "/sign-document"}>
+                <History size={20} />
+                Sign Document
               </NavItem>
             </NavSection>
 
             <NavSection>
               <h2>SETTINGS</h2>
-              <NavItem to="/team" $active={location.pathname === "/team"}>
+              <NavItem onClick={handleLogout} disabled={isLoading}>
                 <Users size={20} />
-                Team
+                LOGOUT
               </NavItem>
-              <NavItem
+              {/* <NavItem
                 to="/settings"
                 $active={location.pathname === "/settings"}
               >
                 <Settings size={20} />
                 Settings
-              </NavItem>
+              </NavItem> */}
             </NavSection>
           </Nav>
         </Sidebar>
@@ -363,6 +397,11 @@ function AppContent() {
           <Route path="/upload-document" element={<UploadDocuments />} />
 
           <Route path="/create-agreement" element={<AgreementForm />} />
+          <Route path="/all-agreements" element={<AgreementList />} />
+          <Route path="/agreement-detail/:id" element={<AgreementDetail />} />
+          <Route path="/edit-document/:id" element={<AgreementEdit />} />
+
+          <Route path="/sign-document" element={<HomePage />} />
 
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/sign-up" element={<SignUpPage />} />

@@ -18,13 +18,13 @@ const SignInPage = () => {
 
   const [ login ] = useLoginMutation()
 
-  const { userInfo } = useSelector((state) => state.auth);
+  // const { userInfo } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (userInfo) {
-      navigate('/upload-document');
-    }
-  }, [navigate, userInfo]);
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     navigate('/upload-document');
+  //   }
+  // }, [navigate, userInfo]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

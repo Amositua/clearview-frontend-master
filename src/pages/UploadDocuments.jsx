@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Upload, File, Trash2, AlertCircle } from "lucide-react";
 
@@ -7,6 +8,8 @@ function UploadDocuments() {
   const [emails, setEmails] = useState("");
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
+
+  const navigate = useNavigate();
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -84,6 +87,7 @@ function UploadDocuments() {
         console.log("Server Response:", result);
         setFile(null);
         setEmails("");
+        navigate("/create-agreement");
       } else {
         const errorData = await response.json();
         alert(`Upload failed: ${errorData.message}`);
@@ -95,8 +99,32 @@ function UploadDocuments() {
     }
   };
 
+  const handleAuthorize = async () => {
+    try {
+      const response = await fetch(
+        "/api/v1/docusign/consent-url"
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        const consentUrl = data.consent_url; // Extract the URL from the response
+        window.open(consentUrl, "_blank"); 
+      } else {
+        const errorData = await response.json();
+        alert(`Authorization failed: ${errorData.message}`);
+      }
+    } catch (error) {
+      alert("An error occurred while fetching the authorization URL.");
+      console.error("Error:", error);
+    }
+  };
+
   return (
     <>
+    <Container>
+    <AuthorizeButton onClick={handleAuthorize}>
+        Get Authorize
+      </AuthorizeButton>
       <Alert>
         <AlertCircle size={20} />
         Files will be scanned for viruses before upload
@@ -143,8 +171,8 @@ function UploadDocuments() {
             </FileInfo>
 
             <DeleteButton onClick={() => removeFile()}>
-                <Trash2 size={20} />
-              </DeleteButton>
+              <Trash2 size={20} />
+            </DeleteButton>
           </FileItem>
           <UploadButton
             onClick={handleUpload}
@@ -154,9 +182,16 @@ function UploadDocuments() {
           </UploadButton>
         </FileList>
       )}
+      </Container>
     </>
   );
 }
+
+const Container = styled.div`
+    // max-width: 600px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+`;
 
 const Alert = styled.div`
   display: flex;
@@ -166,6 +201,7 @@ const Alert = styled.div`
   border-radius: 0.5rem;
   background: #fff3cd;
   color: #856404;
+ 
   margin-bottom: 1rem;
 `;
 
@@ -183,12 +219,28 @@ const UploadArea = styled.div`
   }
 `;
 
+const AuthorizeButton = styled.button`
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 1rem;
+
+  &:hover {
+    background: #218838;
+  }
+`;
+
 const FileInput = styled.input`
   display: none;
 `;
 
 const FileList = styled.div`
-  margin-top: 2rem;
+  margin-top: 6rem;
 `;
 
 const FileItem = styled.div`
@@ -260,4 +312,5 @@ const EmailInput = styled.input`
   border-radius: 0.5rem;
   font-size: 1rem;
 `;
+
 export default UploadDocuments;
