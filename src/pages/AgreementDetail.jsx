@@ -253,30 +253,36 @@ function AgreementDetail() {
     }
   };
 
-  const updateStatus = async (newStatus) => {
+  const handleChangeStatus = async () => {
     setIsUpdating(true);
     try {
         const token = localStorage.getItem("userInfo");
       const parsedToken = JSON.parse(token);
       console.log(parsedToken.accessToken);
+    //   console.log();
       const response = await fetch(
         `/api/v1/agreements/update-status/${id}/status`,
         {
-          method: "PATCH",
+          method: 'PATCH',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${parsedToken.accessToken}`, // Add authorization header
           },
-          body: JSON.stringify({ status: newStatus }),
+          body: "hello"
         }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to update status");
-      }
+      console.log('Response status:', response.status);
 
-      setAgreement((prev) => ({ ...prev, status: newStatus }));
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.log('Error response:', errorText);
+        throw new Error(`Failed to update status: ${errorText}`);
+    }
+
+    //   setAgreement((prev) => ({ ...prev, status: newStatus }));
     } catch (err) {
+        console.log(err);
       setError(err.message);
     } finally {
       setIsUpdating(false);
@@ -408,11 +414,7 @@ function AgreementDetail() {
 
         <ActionButtons>
           <StatusButton
-            onClick={() =>
-              updateStatus(
-                agreement.status === "pending" ? "completed" : "pending"
-              )
-            }
+            onClick={handleChangeStatus}
             disabled={isUpdating}
           >
             <CheckCircle2 size={16} />

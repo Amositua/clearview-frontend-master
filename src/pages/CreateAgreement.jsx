@@ -451,14 +451,14 @@ function AgreementForm() {
     docuSignEnvelopeId: "",
     title: "",
     status: "DRAFT",
-    signedDate: new Date().toISOString(),
+    signedDate: " ",
     milestones: [],
     obligations: []
   });
 
   const [currentMilestone, setCurrentMilestone] = useState({
     title: "",
-    // description: "",
+    description: "",
     dueDate: "",
     status: "PENDING"
   });
@@ -466,7 +466,7 @@ function AgreementForm() {
   const [currentObligation, setCurrentObligation] = useState({
     description: "",
     dueDate: "",
-    // assignedTo: "",
+    assignedTo: "",
     status: "PENDING"
   });
 
@@ -515,7 +515,7 @@ function AgreementForm() {
               placeholder="Enter agreement title"
             />
           </FormGroup>
-          <FormGroup>
+          {/* <FormGroup>
             <Label>DocuSign Envelope ID</Label>
             <Input
               type="text"
@@ -524,7 +524,7 @@ function AgreementForm() {
               onChange={handleAgreementChange}
               placeholder="Enter DocuSign Envelope ID"
             />
-          </FormGroup>
+          </FormGroup> */}
           <FormGroup>
             <Label>Signed Date</Label>
             <Input
@@ -631,7 +631,7 @@ function AgreementForm() {
         title: "",
         description: "",
         dueDate: "",
-        // status: "PENDING"
+        status: "PENDING"
       });
     }
     
@@ -679,7 +679,10 @@ function AgreementForm() {
         throw new Error(data.message || 'Failed to submit form');
       }
 
-      setSuccess('Document uploaded successfully!');
+      setSuccess('Agreemnent Created successfully!');
+      setTimeout(() => {
+        setSuccess("");
+      }, 5000);
       console.log('Server Response:', data);
       
       // Reset form
@@ -688,7 +691,7 @@ function AgreementForm() {
         docuSignEnvelopeId: "",
         title: "",
         status: "DRAFT",
-        signedDate: new Date().toISOString(),
+        signedDate: "",
         milestones: [],
         obligations: []
       });

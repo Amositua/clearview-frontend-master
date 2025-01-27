@@ -212,7 +212,7 @@ function AgreementList() {
     <Container>
       <Header>
         <Title>Agreements</Title>
-        <CreateButton to="/create">
+        <CreateButton to="/create-agreement">
           <Plus size={20} />
           New Agreement
         </CreateButton>
@@ -238,8 +238,8 @@ function AgreementList() {
               Created: {new Date(agreement.signedDate).toLocaleDateString()}
             </CardMeta>
             <div>
-              <div>Milestones: {agreement.milestones?.length || 0}</div>
-              <div>Obligations: {agreement.obligations?.length || 0}</div>
+              <div>Milestones: {agreement.milestones[0].title}</div>
+              <div>Obligations: {agreement.obligations[0].description}</div>
             </div>
             <CardFooter>
               <Status status={agreement.status}>{agreement.status}</Status>

@@ -1,12 +1,13 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Upload, File, Trash2, AlertCircle } from "lucide-react";
+import { Upload, File, Trash2, AlertCircle, CheckCircle  } from "lucide-react";
 
 function UploadDocuments() {
   const [file, setFile] = useState(null);
   const [emails, setEmails] = useState("");
   const [isDragging, setIsDragging] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const fileInputRef = useRef(null);
 
   const navigate = useNavigate();
@@ -24,9 +25,12 @@ function UploadDocuments() {
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
-
-    const droppedFiles = Array.from(e.dataTransfer.files);
-    handleFileChange(droppedFiles);
+  
+    const droppedFiles = Array.from(e.dataTransfer.files); // Get the files from the drag-and-drop event
+    if (droppedFiles.length > 0) {
+      const file = droppedFiles[0]; // Assuming you handle one file at a time
+      setFile(file); // Set the file state
+    }
   };
 
   const handleFileChange = (event) => {
@@ -35,7 +39,11 @@ function UploadDocuments() {
 
   const removeFile = () => {
     setFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null; // Reset the file input's value
+    }
   };
+  
 
   const formatFileSize = (bytes) => {
     if (bytes === 0) return "0 Bytes";
@@ -44,6 +52,8 @@ function UploadDocuments() {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
+
+  console.log(file);
 
   const handleUpload = async () => {
     if (!emails.trim()) {
@@ -58,7 +68,6 @@ function UploadDocuments() {
       alert("Please select files to upload.");
       return;
     }
-
     const formData = new FormData();
     if (file) {
       formData.append("file", file); // Attach the file
@@ -83,11 +92,17 @@ function UploadDocuments() {
 
       if (response.ok) {
         const result = await response.json();
-        alert("Files uploaded successfully!");
+        // Hide message after 5 seconds
+        // alert("Files uploaded successfully!");
         console.log("Server Response:", result);
+        setSuccessMessage("Document uploaded successfully!");
         setFile(null);
         setEmails("");
-        navigate("/create-agreement");
+        
+        // Clear success message after 5 seconds
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, 5000);
       } else {
         const errorData = await response.json();
         alert(`Upload failed: ${errorData.message}`);
@@ -118,9 +133,19 @@ function UploadDocuments() {
       console.error("Error:", error);
     }
   };
+  console.log(successMessage);
 
   return (
     <>
+    {successMessage && (
+        <SuccessToast>
+          <ToastContent>
+            <CheckCircle size={20} />
+            <span>{successMessage}</span>
+          </ToastContent>
+          <ToastProgress />
+        </SuccessToast>
+      )}
     <Container>
     <AuthorizeButton onClick={handleAuthorize}>
         Get Authorize
@@ -186,6 +211,62 @@ function UploadDocuments() {
     </>
   );
 }
+const SuccessToast = styled.div`
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffff;
+  border-left: 4px solid #10B981;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 6px;
+  padding: 16px 24px;
+  z-index: 1000;
+  min-width: 300px;
+  animation: slideIn 0.3s ease-out;
+
+  @keyframes slideIn {
+    from {
+      transform: translate(-50%, -100%);
+      opacity: 0;
+    }
+    to {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+  }
+`;
+
+const ToastContent = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #059669;
+  font-weight: 500;
+
+  svg {
+    flex-shrink: 0;
+  }
+`;
+
+const ToastProgress = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: #10B981;
+  width: 100%;
+  animation: progress 5s linear;
+
+  @keyframes progress {
+    from {
+      width: 100%;
+    }
+    to {
+      width: 0%;
+    }
+  }
+`;
 
 const Container = styled.div`
     // max-width: 600px;
@@ -293,6 +374,7 @@ const UploadButton = styled.button`
   cursor: pointer;
   transition: all 0.2s ease;
   margin-top: 1rem;
+  margin-bottom: 2rem;
 
   &:hover {
     background: #1557b0;
