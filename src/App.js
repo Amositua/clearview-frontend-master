@@ -293,7 +293,7 @@ function AppContent() {
      const res = await logoutCall(accessToken).unwrap(); // `.unwrap()` resolves the mutation to a Promise
      console.log(res);
       dispatch(logout());
-      navigate('/');
+      navigate('/sign-in');
     } catch (err) {
       console.error('Logout failed:', err);
     }
@@ -353,11 +353,11 @@ function AppContent() {
 
             <NavSection>
               <h2>MORE TOOLS</h2>
-              <NavItem onClick={handleLogout} disabled={isLoading}>
+              <NavItem disabled={isLoading}>
                 <Users size={20} />
                 Sync Calender
               </NavItem>
-              <NavItem onClick={handleLogout} disabled={isLoading}>
+              <NavItem disabled={isLoading}>
                 <Users size={20} />
                 Notifications
               </NavItem>

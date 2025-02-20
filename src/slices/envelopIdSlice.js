@@ -2,7 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import { apiSlice } from './apiSlice';
 
 const initialState = {
-  envelopId: null,
+  envelopId: {
+    data: {
+      docuSignEnvelopeId: null
+    }
+  },
 };
 // Create a slice for storing POST response globally
 const postResponseSlice = createSlice({
