@@ -42,7 +42,7 @@ const SignInPage = () => {
         navigate('/upload-document')
         console.log(res)
       } catch (err) {
-        // toast.error(err)
+        console.log(err)
       }
     // Reset form after successful sign-in
     setEmail('');
