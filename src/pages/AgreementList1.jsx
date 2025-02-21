@@ -165,12 +165,14 @@ function AgreementList() {
     fetchAgreements();
   }, []);
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   const fetchAgreements = async () => {
     try {
       const token = localStorage.getItem("userInfo");
       const parsedToken = JSON.parse(token);
       console.log(parsedToken.accessToken);
-      const response = await fetch("/api/v1/agreements/get-all-agreement", {
+      const response = await fetch(`${API_BASE_URL}/api/v1/agreements/get-all-agreement`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${parsedToken.accessToken}`, // Add authorization header
