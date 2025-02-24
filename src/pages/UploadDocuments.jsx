@@ -123,10 +123,12 @@ function UploadDocuments() {
     }
   };
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   const handleAuthorize = async () => {
     try {
       const response = await fetch(
-        "/api/v1/docusign/consent-url"
+        `${API_BASE_URL}/api/v1/docusign/consent-url`
       );
 
       if (response.ok) {

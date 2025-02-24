@@ -16,12 +16,15 @@ function DocumentSigning() {
   const postResponse = useSelector((state) => state.res);
   const envelopeId = postResponse.envelopId?.data.docuSignEnvelopeId;
   console.log(postResponse.envelopId.data.docuSignEnvelopeId);
+
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   const handleAuthenticate = async () => {
     setIsAuthenticating(true);
     setError("");
 
     try {
-      const response = await fetch("/api/v1/docusign/consent-url");
+      const response = await fetch(`${API_BASE_URL}/api/v1/docusign/consent-url`);
 
       if (response.ok) {
         const data = await response.json();
@@ -70,7 +73,7 @@ function DocumentSigning() {
     console.log(queryParams);
 
       const response = await fetch(
-        `/api/v1/documents/signing-url?${queryParams}`,
+        `${API_BASE_URL}/api/v1/documents/signing-url?${queryParams}`,
         {
           method: "POST",
           headers: { Authorization: `Bearer ${parsedToken.accessToken}`}

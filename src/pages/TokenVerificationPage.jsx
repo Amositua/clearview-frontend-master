@@ -12,11 +12,13 @@ const TokenVerification = () => {
   const { email } = useParams();
   console.log(email);
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       // API call to verify token
-      const response = await fetch(`/api/v1/forgot-password/verify-otp/${token}/${email}`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/forgot-password/verify-otp/${token}/${email}`, {
         method: 'POST',
         // headers: { 'Content-Type': 'application/json' },
         // body: JSON.stringify({ token }),

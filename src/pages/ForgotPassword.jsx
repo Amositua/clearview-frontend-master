@@ -9,13 +9,15 @@ const ForgotPasswordPage = () => {
 
   const navigate = useNavigate();
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   const handleSubmit = async (e) => {
     console.log("email:", email);
     e.preventDefault();
     try {
       // API call to send token to the email
       const response = await fetch(
-        `/api/v1/forgot-password/verify-email/${email}`,
+        `${API_BASE_URL}/api/v1/forgot-password/verify-email/${email}`,
         {
           method: "POST",
           // headers: { 'Content-Type': 'application/json' },

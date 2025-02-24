@@ -252,7 +252,7 @@ function AgreementEdit() {
         body: JSON.stringify(agreement),
       });
 
-           const updatedAgreement = await response.json();
+        const updatedAgreement = await response.json();
       console.log('Updated Agreement:', updatedAgreement);
       if (!response.ok) {
         throw new Error('Failed to update agreement');

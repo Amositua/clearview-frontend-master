@@ -21,9 +21,11 @@ const ResetPassword = () => {
       return;
     }
 
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
     try {
       // API call to reset the password
-      const response = await fetch(`/api/v1/forgot-password/change-password/${email}`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/forgot-password/change-password/${email}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password, repeatedPassword: confirmPassword }),
