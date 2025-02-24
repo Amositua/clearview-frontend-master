@@ -24,7 +24,7 @@ import { logout } from './slices/authSlice'
 import { useDispatch } from 'react-redux'
 // Import pages
 import HomePage from "./pages/Homepage";
-import LogExpense from "./pages/test";
+// import LogExpense from "./pages/test";
 import SignInPage from "./pages/SignIn";
 import SignUpPage from "./pages/SignUp";
 
@@ -260,7 +260,10 @@ function AppContent() {
 
   const [logoutCall, { isLoading }] = useLogoutMutation(); 
 
-  
+  // Add this to your app initialization
+useEffect(() => {
+  localStorage.removeItem('userInfo');
+}, []);
 
   // Handle window resize
   useEffect(() => {
@@ -427,7 +430,6 @@ function AppContent() {
           <Route path="/reset-password/:email" element={<ResetPassword />} />
 
 
-          <Route path="/test" element={<LogExpense />} />
           {/* Other routes */}
         </Routes>
       </MainContent>
