@@ -723,7 +723,7 @@ function AgreementDetail() {
       const token = localStorage.getItem("userInfo");
       const parsedToken = JSON.parse(token);
       const response = await fetch(
-        `/api/v1/agreements/delete-agreement/${id}`,
+        `${API_BASE_URL}/api/v1/agreements/delete-agreement/${id}`,
         {
           method: "DELETE",
           headers: {

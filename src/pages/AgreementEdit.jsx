@@ -207,12 +207,14 @@ function AgreementEdit() {
     fetchAgreement();
   }, [id]);
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   const fetchAgreement = async () => {
     try {
       const token = localStorage.getItem("userInfo");
       const parsedToken = JSON.parse(token);
       const response = await fetch(
-        `/api/v1/agreements/get-agreementById/${id}`,
+        `${API_BASE_URL}/api/v1/agreements/get-agreementById/${id}`,
         {
           headers: {
             Authorization: `Bearer ${parsedToken.accessToken}`,
@@ -241,7 +243,7 @@ function AgreementEdit() {
       const parsedToken = JSON.parse(token);
       console.log(parsedToken.accessToken);
       console.log(agreement)
-      const response = await fetch(`/api/v1/agreements/update-agreement/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/agreements/update-agreement/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
